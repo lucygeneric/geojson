@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'countries/countries.dart';
-import 'railroads/railroads.dart';
-import 'airports/airports.dart';
-import 'airports/nearby_airports.dart';
-import 'index.dart';
+
 
 final routes = {
-  '/countries': (BuildContext context) => CountriesPage(),
-  '/railroads': (BuildContext context) => RailroadsPage(),
-  '/airports': (BuildContext context) => AirportsPage(),
-  '/nearby_airports': (BuildContext context) => NearbyAirportsPage(),
+  '/': (BuildContext context) => Container(),
 };
 
 class MyApp extends StatelessWidget {
@@ -18,7 +11,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Geojson Flutter example',
-      home: IndexPage(),
       routes: routes,
     );
   }

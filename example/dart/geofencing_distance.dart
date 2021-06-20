@@ -1,5 +1,5 @@
 import 'package:geojson/geojson.dart';
-import 'package:geopoint/geopoint.dart';
+import 'package:geopoint2/geopoint2.dart';
 
 void main(List<String> args) async {
   int km = 200;

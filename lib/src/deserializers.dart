@@ -1,4 +1,4 @@
-import 'package:geopoint/geopoint.dart';
+import 'package:geopoint2/geopoint2.dart';
 
 import 'models.dart';
 
