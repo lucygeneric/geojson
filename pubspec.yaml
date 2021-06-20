@@ -1,8 +1,8 @@
 name: geojson
 description: Utilities to work with geojson data. Parser with a reactive api,
   search and geofencing
-homepage: https://github.com/synw/geojson
-version: 0.10.0
+homepage: https://github.com/lucygeneric/geojson
+version: 0.10.1
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
