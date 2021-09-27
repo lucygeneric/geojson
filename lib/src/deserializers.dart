@@ -4,10 +4,10 @@ import 'models.dart';
 
 /// Get a collection inside another collection
 GeoJsonGeometryCollection getGeometryCollection(
-    {List<GeoJsonFeature> geometries,
-    GeoJsonFeature feature,
-    String nameProperty}) {
-  final name = _getName(feature: feature, nameProperty: nameProperty);
+    {List<GeoJsonFeature> geometries = const [],
+    GeoJsonFeature? feature,
+    String? nameProperty}) {
+  final name = _getName(feature: feature!, nameProperty: nameProperty!);
   final collection =
       GeoJsonGeometryCollection(geometries: geometries, name: name);
   return collection;
@@ -15,8 +15,8 @@ GeoJsonGeometryCollection getGeometryCollection(
 
 /// Get a point from coordinates and feature
 GeoJsonPoint getPoint(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
-  final point = GeoJsonPoint();
+    {required List<dynamic> coordinates, required GeoJsonFeature feature, required String nameProperty}) {
+  final point = GeoJsonPoint(geoPoint: GeoPoint(latitude: 123, longitude: 123), name: 'foo');
   final name = _getName(feature: feature, nameProperty: nameProperty);
   final geoPoint = _getGeoPoints(<dynamic>[coordinates])[0]..name = name;
   point
@@ -27,21 +27,21 @@ GeoJsonPoint getPoint(
 
 /// Get multi points from coordinates and feature
 GeoJsonMultiPoint getMultiPoint(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
+    {List<dynamic>? coordinates, GeoJsonFeature? feature, String? nameProperty}) {
   final multiPoint = GeoJsonMultiPoint();
-  final name = _getName(feature: feature, nameProperty: nameProperty);
+  final name = _getName(feature: feature!, nameProperty: nameProperty!);
   multiPoint.name = name;
   final geoSerie = GeoSerie(
       name: name,
       type: GeoSerieType.group,
-      geoPoints: _getGeoPoints(coordinates));
+      geoPoints: _getGeoPoints(coordinates!));
   multiPoint.geoSerie = geoSerie;
   return multiPoint;
 }
 
 /// Get a line from coordinates and feature
 GeoJsonLine getLine(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
+    {required List<dynamic> coordinates, required GeoJsonFeature feature, required String nameProperty}) {
   final line = GeoJsonLine();
   final name = _getName(feature: feature, nameProperty: nameProperty);
   line.name = name;
@@ -55,7 +55,7 @@ GeoJsonLine getLine(
 
 /// Get a multi line from coordinates and feature
 GeoJsonMultiLine getMultiLine(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
+    {required List<dynamic> coordinates, required GeoJsonFeature feature, required String nameProperty}) {
   final name = _getName(feature: feature, nameProperty: nameProperty);
   final multiLine = GeoJsonMultiLine(name: name);
   var i = 1;
@@ -67,7 +67,7 @@ GeoJsonMultiLine getMultiLine(
         type: GeoSerieType.line,
         geoPoints: _getGeoPoints(coords as List<dynamic>));
     line.geoSerie = geoSerie;
-    multiLine.lines.add(line);
+    multiLine.lines!.add(line);
     ++i;
   }
   return multiLine;
@@ -75,8 +75,8 @@ GeoJsonMultiLine getMultiLine(
 
 /// Get a polygon from coordinates and feature
 GeoJsonPolygon getPolygon(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
-  final polygon = GeoJsonPolygon();
+    {required List<dynamic> coordinates, required GeoJsonFeature feature, required String nameProperty}) {
+  final polygon = GeoJsonPolygon(name: 'foo');
   final name = _getName(feature: feature, nameProperty: nameProperty);
   polygon.name = name;
   for (final coords in coordinates) {
@@ -84,19 +84,19 @@ GeoJsonPolygon getPolygon(
         name: _getName(feature: feature, nameProperty: nameProperty),
         type: GeoSerieType.polygon)
       ..geoPoints = _getGeoPoints(coords as List<dynamic>);
-    polygon.geoSeries.add(geoSerie);
+    polygon.geoSeries!.add(geoSerie);
   }
   return polygon;
 }
 
 /// Get a multipolygon from coordinates and feature
 GeoJsonMultiPolygon getMultipolygon(
-    {List<dynamic> coordinates, GeoJsonFeature feature, String nameProperty}) {
-  final multiPolygon = GeoJsonMultiPolygon();
+    {required List<dynamic> coordinates, required GeoJsonFeature feature, required String nameProperty}) {
+  final multiPolygon = GeoJsonMultiPolygon(name: 'foo');
   var i = 1;
   multiPolygon.name = _getName(feature: feature, nameProperty: nameProperty);
   for (final coordsL2 in coordinates) {
-    final polygon = GeoJsonPolygon();
+    final polygon = GeoJsonPolygon(name: 'foo');
     final name =
         _getName(feature: feature, nameProperty: nameProperty, index: i);
     polygon.name = name;
@@ -105,21 +105,21 @@ GeoJsonMultiPolygon getMultipolygon(
           name: _getName(feature: feature, nameProperty: nameProperty),
           type: GeoSerieType.polygon)
         ..geoPoints = _getGeoPoints(coords as List<dynamic>);
-      polygon.geoSeries.add(geoSerie);
+      polygon.geoSeries!.add(geoSerie);
     }
-    multiPolygon.polygons.add(polygon);
+    multiPolygon.polygons!.add(polygon);
     ++i;
   }
   return multiPolygon;
 }
 
-String _getName({GeoJsonFeature feature, String nameProperty, int index}) {
-  String name;
+String _getName({required GeoJsonFeature feature, required String nameProperty, int index = 0}) {
+  String name = '';
   if (nameProperty != null) {
-    name = feature.properties[nameProperty].toString();
+    name = feature.properties![nameProperty].toString();
   } else {
-    if (feature.properties.containsKey("name") == true) {
-      name = feature.properties["name"].toString();
+    if (feature.properties!.containsKey("name") == true) {
+      name = feature.properties!["name"].toString();
     }
   }
   if (name == null || name == "null") {
